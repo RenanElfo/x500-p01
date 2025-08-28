@@ -1,23 +1,22 @@
 # pyright: basic
-from pathlib import Path
+import pandas as pd
+import numpy as np
+from matplotlib import pyplot as plt
 
 import get_data as gd
-
-def get_correlation(relevant_information):
-    return relevant_information.loc[
-        :, ~relevant_information.columns.isin(("playerId", "positionId"))
-    ].corr()
-
+import stats as st
+import graphs as gp
 
 if __name__ == "__main__":
     data = gd.get_sanitized_data()
-    print("Number of players: ", gd.number_of_players(data))
-    correlation = data.loc[:, ~data.columns.isin(gd.NON_METRIC_INFO)].corr()
-    print(correlation["height/cm"])
-    # for position, position_group in relevant_information.groupby("positionId"):
-    #     print(position_group, end="\n\n")
-    #     print(get_correlation(position_group), end="\n\n")
-    #
-    # for player_age, age_group in relevant_information.groupby("age"):
-    #     print(age_group, end="\n\n")
-    #     print(get_correlation(age_group), end="\n\n")
+    print(data.describe())
+    print(pd.Series(data["height/cm"]).sort_values(ascending=True))
+    print("Number of players: ", st.number_of_players(data))
+    correlation_matrix = st.get_height_correlation(data)
+    print(correlation_matrix)
+    print(st.get_correlation_by_position(data))
+    heights = data["height/cm"].to_numpy()
+    heights.sort()
+    print(heights)
+    gp.show_correlation_color_map(data, save=True)
+    # print(st.get_correlation_by_age(data))
