@@ -19,4 +19,5 @@ if __name__ == "__main__":
     heights.sort()
     print(heights)
     gp.show_correlation_color_map(data, save=True)
+    gp.generate_height_histogram(data, save=True)
     # print(st.get_correlation_by_age(data))
